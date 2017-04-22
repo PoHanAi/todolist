@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by brian942608 (http://jsbin.com/nohapaf/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+  <meta name="description" content="TODO List - Lesson 10 #HW">
+  <meta charset="utf-8">
+  <title>TODO List</title>
+<style id="jsbin-css">
+.m{
+  font-size:11px;
+}
+
+li button{
+  float: right;
+  
+}
+button{
+  font-family: 'Dancing Script', cursive;
+}
+
+
+.outer{
+  
+  width:450px;
+  margin:auto;
+  padding:30px;
+}
+
+body{
+  background-image:url(http://www.khjh.kh.edu.tw/mewawa/dw4/bg1-a/images/back4-9_jpg.gif);
+  font-family: 'Dancing Script', cursive;
+  text-shadow: 2px 2px 3px #434a54;
+}
+</style>
+</head>
+<body>
+  <div class ="outer">
+    <h1>TODO List</h1>
+    <input id="input" class="js-task-checkbox" type="text" />
+    <button id="add-button">加入</button>
+    <div>
+      <ul id="task-list" style="list-style: none">
+      </ul>
+      共有<span id="total-task-number">0</span>個事項
+      <button id="delete-completed-button">刪除已完成事項</button>
+      <hr>
+      <button id="displayDoneTaskButton">顯示已完成事項</button>
+      <button id="showUndoneButton">顯示未完成事項</button>
+      <button id="showAllButton">顯示所有事項</button>
+    </div>
+  </div>
+<script id="jsbin-javascript">
+
+updateTotalTaskCount();
+
+function createHTMLStr( text ){
+ var g=new Date();
+ var h="<li>"+
+			"<label>"+
+				"<input type='checkbox'>" +
+				"<span>" +text + "</span>" +
+			"</label>"+
+			"<button class='js-edit-button'>編輯</button>"+
+			"<button class='js-delete-button'>刪除</button>"+ 
+		     "<br>"+
+      "<span class='m'>"+g+
+      "/<span>"+
+		"</li>";
+  return h;
+}
+
+// ==== 新增事項 ==== //
+function addTask(){
+	var text = $("input").val();
+	var u=createHTMLStr(text);
+    $("ul").append(u);
+	$("input").val("");
+	updateTotalTaskCount();
+}
+
+function isEnterPressed(event){
+  if (event.which === 13){
+    addTask();
+  }
+}
+
+// 為“新增按鈕”綁定點擊事件
+$("#add-button").on("click", addTask);
+
+// 為“輸入欄位”綁定點擊事件
+$("#input").on("keypress", isEnterPressed);
+
+
+// ==== 刪除單一事項 ==== //
+function deleteTask(){
+  var $target = $(this).closest("li");
+  $target.remove();
+	updateTotalTaskCount();
+}
+$("ul").on("click", ".js-delete-button", deleteTask);
+
+
+
+
+// ==== 修改單一事項 ==== //
+function editTask(){
+	var $element =$(this).closest("li").find("span");
+	var newText = prompt("輸入想更改的文字");
+	$element.text(newText);
+}
+$("ul").on("click", ".js-edit-button", editTask);
+
+
+
+
+
+
+
+
+// ==== 刪除所有已完成事項 ==== //
+$("#delete-completed-button").on("click", removeCompletedTasks);
+                                 
+function removeCompletedTasks(){
+
+  $(":checked").closest("li").remove();
+	updateTotalTaskCount()
+}
+
+
+function updateTotalTaskCount(){
+	var count = $("li").length;
+	$("#total-task-number").text(count);
+}
+
+
+$("#displayDoneTaskButton").on("click",showDoneTask);
+
+
+function showDoneTask(){
+	$("li").fadeOut(500);
+	$(":checked").closest("li").fadeIn(500);
+}
+
+// 顯示所有事項
+$("#showAllButton").on("click",showTask);
+
+function showTask(){
+	$("li").fadeIn(500);
+}
+
+$("#showUndoneButton").on("click",showUndoneTask);
+
+function showUndoneTask(){
+	$("li").fadeIn(500);
+	$(":checked").closest("li").fadeOut(500);
+}
+
+
+
+
+
+</script>
+</body>
+</html>
